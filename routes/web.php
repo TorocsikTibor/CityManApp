@@ -15,3 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [CityController::class, 'index'])->name('index');
+Route::get('/county/{id}', [CityController::class, 'getCities']);
+Route::post('/county/city/create', [CityController::class, 'create']);

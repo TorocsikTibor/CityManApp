@@ -37,5 +37,10 @@ class DatabaseSeeder extends Seeder
             ];
 
         DB::table('counties')->insert($counties);
+
+        DB::table('cities')->insert([
+           'name' => "test",
+           'county_id' => 1,
+        ]);
     }
 }
