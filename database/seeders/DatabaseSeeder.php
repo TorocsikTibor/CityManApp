@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +13,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $counties = [
+            ['name' => 'Bács-Kiskun'],
+            ['name' => 'Baranya'],
+            ['name' => 'Békés'],
+            ['name' => 'Borsod-Abaúj-Zemplén'],
+            ['name' => 'Csongrád-Csanád'],
+            ['name' => 'Fejér'],
+            ['name' => 'Győr-Moson-Sopron'],
+            ['name' => 'Hajdú-Bihar'],
+            ['name' => 'heves'],
+            ['name' => 'Jász-Nagykun-Szolnok'],
+            ['name' => 'Komáron-Esztergom'],
+            ['name' => 'Nógrád'],
+            ['name' => 'Pest'],
+            ['name' => 'Somogy'],
+            ['name' => 'Szabolcs-Szatmár-Bereg'],
+            ['name' => 'Tolna'],
+            ['name' => 'Vas'],
+            ['name' => 'Veszprém'],
+            ['name' => 'Zala'],
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+            ];
+
+        DB::table('counties')->insert($counties);
     }
 }
