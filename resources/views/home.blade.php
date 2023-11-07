@@ -27,6 +27,12 @@
                 </div>
             </div>
 
+            <div class="container">
+                <div class="col-md-10">
+                    <div id="showNewCity"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 </main>
@@ -35,7 +41,6 @@
     $(document).ready(function () {
         $('#selectInput').on('change', function () {
             let selectedInput = $(this).val();
-            console.log(selectedInput);
             let cityNames = '';
 
             $.ajax({
@@ -44,26 +49,25 @@
                 dataType: "json",
                 success: function (response) {
                     $.each(response, function (index, city) {
-                        cityNames += city.name;
+                        cityNames += '<p data-id="'+ city.id +'" class="cityId">' + city.name + '</p>';
                     });
-                    console.log(cityNames);
-                    $('#showCities').text(cityNames);
-                    let inputHTML = '<label class="form-label" for="cityName">Új város</label>' +
+                    $('#showCities').append(cityNames);
+                    let inputHTML =
+                        '<label class="form-label" for="cityName">Új város</label>' +
                         '<input type="text" class="form-control" id="cityName">' +
                         '<input type="submit" id="addCity" class="btn btn-primary">';
-                    $('#showCities').append(inputHTML);
-
+                    $('#showNewCity').append(inputHTML);
                 }
             });
         });
 
         $(document).on('click', '#addCity', function () {
-           let selectedCounty = $('#selectInput').val();
-           let cityName = $('#cityName').val();
-           let data = {
-               'county_id': selectedCounty,
-               'name': cityName,
-           }
+            let selectedCounty = $('#selectInput').val();
+            let cityName = $('#cityName').val();
+            let data = {
+                'county_id': selectedCounty,
+                'name': cityName,
+            }
 
             $.ajaxSetup({
                 headers: {
@@ -71,17 +75,37 @@
                 }
             });
 
-           console.log(selectedCounty, cityName);
-           $.ajax({
-               url: 'county/city/create',
-               type: 'POST',
-               dataType: "json",
-               data: data,
-               success: function (response) {
-                   $('#showCities').text(response.name);
-                   console.log(response)
-               }
-           });
+            console.log(selectedCounty, cityName);
+            $.ajax({
+                url: 'county/city/create',
+                type: 'POST',
+                dataType: "json",
+                data: data,
+                success: function (response) {
+                    $('#showCities').text(response.name);
+                }
+            });
+        });
+
+        $('#showCities').on('click', '.cityId', function () {
+            let textId = $(this).data('id');
+            let textValue = $(this).text();
+            console.log(textValue);
+            let inputText = '<input class="form-control" id="inputField" type="text" value="' + textValue + '">' +
+                '<input class="btn btn-primary" id="modify" type="submit" value="módosít">' +
+                '<input class="btn btn-primary" id="delete" type="submit" value="Törlés">' +
+                '<input class="btn btn-primary" id="cancel" type="submit" value="Mégsem">';
+            $(this).replaceWith(inputText);
+
+            $(document).off('click', '#cancel');
+            $(document).on('click', '#cancel', function () {
+                let textValue = $('#inputField').val();
+                let pElement = $('<p class="cityId" data-id="' + textId + '">' + textValue + '</p>');
+                $(this).siblings('#modify, #delete, #cancel').remove(); // Remove the input fields and buttons
+                $(this).siblings('#inputField').replaceWith(pElement); // Replace the "Cancel" button with the <p> element
+                $(this).remove();
+                console.log('Cancel button clicked');
+            });
         });
     });
 </script>

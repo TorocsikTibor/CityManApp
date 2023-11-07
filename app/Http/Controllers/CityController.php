@@ -14,7 +14,7 @@ class CityController extends Controller
         return view('home', ['counties' => $counties]);
     }
 
-    public function getCities(Request $request, $id)
+    public function getCities($id)
     {
         $cities = City::where('county_id', $id)->get();
 
