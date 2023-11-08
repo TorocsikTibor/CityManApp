@@ -49,7 +49,9 @@
                 dataType: "json",
                 success: function (response) {
                     $.each(response, function (index, city) {
-                        cityNames += '<p data-id="'+ city.id +'" class="cityId">' + city.name + '</p>';
+                        cityNames +=  '<div class="city">' +
+                            '<p data-id="'+ city.id +'" class="cityName">' + city.name + '</p>' +
+                            '</div>';
                     });
                     $('#showCities').append(cityNames);
                     let inputHTML =
@@ -87,24 +89,52 @@
             });
         });
 
-        $('#showCities').on('click', '.cityId', function () {
-            let textId = $(this).data('id');
-            let textValue = $(this).text();
-            console.log(textValue);
-            let inputText = '<input class="form-control" id="inputField" type="text" value="' + textValue + '">' +
-                '<input class="btn btn-primary" id="modify" type="submit" value="módosít">' +
-                '<input class="btn btn-primary" id="delete" type="submit" value="Törlés">' +
-                '<input class="btn btn-primary" id="cancel" type="submit" value="Mégsem">';
-            $(this).replaceWith(inputText);
+        $('#showCities').on('click', '.city', function () {
+            if ($(this).has('.cityEditor').length === 0) {
+                let cityNameEl = $(this).children('.cityName');
+                let cityName = cityNameEl.text();
+                $(cityNameEl).hide();
 
-            $(document).off('click', '#cancel');
-            $(document).on('click', '#cancel', function () {
-                let textValue = $('#inputField').val();
-                let pElement = $('<p class="cityId" data-id="' + textId + '">' + textValue + '</p>');
-                $(this).siblings('#modify, #delete, #cancel').remove(); // Remove the input fields and buttons
-                $(this).siblings('#inputField').replaceWith(pElement); // Replace the "Cancel" button with the <p> element
-                $(this).remove();
-                console.log('Cancel button clicked');
+                $(this).append(
+                    '<div class="cityEditor">' +
+                    '<input type="text" name="name" class="form-control cityValue" value="' + cityName + '">' +
+                    '<input type="button" class="btn btn-primary update" value="Mentés">' +
+                    '<input type="button" class="btn btn-primary delete" value="Törlés">' +
+                    '<input type="button" class="btn btn-primary cancel" value="Mégse">' +
+                    '</div>'
+                );
+            }
+        });
+
+        $(document).on('click', '.cancel', function () {
+            $(this).closest('.city').children('.cityName').show();
+            $(this).closest('.cityEditor').remove();
+        });
+
+        $(document).on('click', '.update', function () {
+            let cityName = $(this).siblings('.cityValue').val();
+            let cityId = $(this).closest('.city').children('.cityName').data('id');
+            let button = $(this);
+
+            let data = {
+                'name': cityName,
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: 'county/city/update/' + cityId,
+                type: 'POST',
+                dataType: "json",
+                data: data,
+                success: function () {
+                    button.closest('.city').children('.cityName').text(cityName).show();
+                    button.closest('.cityEditor').remove();
+                }
             });
         });
     });

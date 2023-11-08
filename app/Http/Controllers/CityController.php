@@ -30,4 +30,13 @@ class CityController extends Controller
 
         return response()->json([$city]);
     }
+
+    public function update(Request $request, int $id)
+    {
+        $city = City::find($id);
+        $city->name = $request->input('name');
+        $city->save();
+
+        return response()->json('success');
+    }
 }
