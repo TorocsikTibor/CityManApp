@@ -13,8 +13,11 @@
 <main class="py-5">
     <div class="container">
         <div class="row justify-content-center">
+
+            <div id="success_message"></div>
+
             <label class="form-label" for="select">Megye</label>
-            <select class="form-select" id="selectInput" aria-label="Default select example" name="select">
+            <select class="form-select selectInput" aria-label="Default select example" name="select">
                 <option selected>Válasszon</option>
                 @foreach($counties as $county)
                     <option value="{{ $county->id }}">{{ $county->name }}</option>
@@ -23,13 +26,13 @@
 
             <div class="container">
                 <div class="col-md-10">
-                    <div id="showCities"></div>
+                    <div class="showCities"></div>
                 </div>
             </div>
 
             <div class="container">
                 <div class="col-md-10">
-                    <div id="showNewCity"></div>
+                    <div class="showNewCity"></div>
                 </div>
             </div>
 
@@ -39,7 +42,7 @@
 
 <script type="module">
     $(document).ready(function () {
-        $('#selectInput').on('change', function () {
+        $('.selectInput').on('change', function () {
             let selectedInput = $(this).val();
             let cityNames = '';
 
@@ -53,19 +56,19 @@
                             '<p data-id="'+ city.id +'" class="cityName">' + city.name + '</p>' +
                             '</div>';
                     });
-                    $('#showCities').append(cityNames);
+                    $('.showCities').append(cityNames);
                     let inputHTML =
                         '<label class="form-label" for="cityName">Új város</label>' +
-                        '<input type="text" class="form-control" id="cityName">' +
-                        '<input type="submit" id="addCity" class="btn btn-primary">';
-                    $('#showNewCity').append(inputHTML);
+                        '<input type="text" class="form-control newCityName">' +
+                        '<input type="submit" class="btn btn-primary addCity">';
+                    $('.showNewCity').append(inputHTML);
                 }
             });
         });
 
-        $(document).on('click', '#addCity', function () {
-            let selectedCounty = $('#selectInput').val();
-            let cityName = $('#cityName').val();
+        $(document).on('click', '.addCity', function () {
+            let selectedCounty = $('.selectInput').val();
+            let cityName = $('.newCityName').val();
             let data = {
                 'county_id': selectedCounty,
                 'name': cityName,
@@ -84,12 +87,12 @@
                 dataType: "json",
                 data: data,
                 success: function (response) {
-                    $('#showCities').text(response.name);
+                    $('.showCities').text(response.name);
                 }
             });
         });
 
-        $('#showCities').on('click', '.city', function () {
+        $('.showCities').on('click', '.city', function () {
             if ($(this).has('.cityEditor').length === 0) {
                 let cityNameEl = $(this).children('.cityName');
                 let cityName = cityNameEl.text();
@@ -133,6 +136,28 @@
                 data: data,
                 success: function () {
                     button.closest('.city').children('.cityName').text(cityName).show();
+                    button.closest('.cityEditor').remove();
+                }
+            });
+        });
+
+        $(document).on('click', '.delete', function () {
+            let cityId = $(this).closest('.city').children('.cityName').data('id');
+            let button = $(this);
+            console.log(cityId);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/county/city/delete/" + cityId,
+                success: function () {
+                    $('#success_message').html("");
+                    $('#success_message').addClass('alert alert-success');
+                    $('#success_message').text('City deleted');
                     button.closest('.cityEditor').remove();
                 }
             });

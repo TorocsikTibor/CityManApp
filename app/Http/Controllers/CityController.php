@@ -39,4 +39,12 @@ class CityController extends Controller
 
         return response()->json('success');
     }
+
+    public function delete(int $id)
+    {
+        $city = City::find($id);
+        $city->delete();
+
+        return response()->json('success');
+    }
 }

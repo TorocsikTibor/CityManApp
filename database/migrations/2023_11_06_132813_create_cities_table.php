@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use SoftDeletes;
     /**
      * Run the migrations.
      */
@@ -17,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('county_id');
             $table->foreign('county_id')->references('id')->on('counties');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
