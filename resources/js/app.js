@@ -1,3 +1,7 @@
 import './bootstrap';
-import jQuery from 'jquery';
-window.$ = jQuery;
+import './showCities.js';
+import './addCity.js';
+import './deleteCity.js';
+import './editCity.js';
+import './hideEdit.js';
+import './updateCity.js';

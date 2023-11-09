@@ -33,7 +33,6 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Vas'],
             ['name' => 'Veszprém'],
             ['name' => 'Zala'],
-
             ];
 
         DB::table('counties')->insert($counties);

@@ -4,46 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\County;
+use App\Services\CityService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
-    public function index()
+    public function index(): View|Application|Factory
     {
         $counties = County::all();
+
         return view('home', ['counties' => $counties]);
     }
 
-    public function getCities($id)
+    public function getCities($id): JsonResponse
     {
         $cities = City::where('county_id', $id)->get();
 
         return response()->json($cities);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, CityService $cityService): JsonResponse
     {
-        $city = new City;
-        $city->county_id = $request->input('county_id');
-        $city->name = $request->input('name');
-        $city->save();
+        $city = $cityService->create($request->input('county_id'), $request->input('name'));
 
-        return response()->json([$city]);
+        return response()->json($city);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id, CityService $cityService): JsonResponse
     {
-        $city = City::find($id);
-        $city->name = $request->input('name');
-        $city->save();
+        $cityService->update($id, $request->input('name'));
 
         return response()->json('success');
     }
 
-    public function delete(int $id)
+    public function delete(int $id, CityService $cityService): JsonResponse
     {
-        $city = City::find($id);
-        $city->delete();
+        $cityService->delete($id);
 
         return response()->json('success');
     }
