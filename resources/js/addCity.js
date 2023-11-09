@@ -19,10 +19,11 @@ $(document).ready(function () {
             dataType: "json",
             data: data,
             success: function (response) {
-                const cityName = '<div class="city mb-3">' +
-                    '<p data-id="' + response.id + '" class="cityName">' + response.name + '</p>' +
-                    '</div>';
-                $('.showCities').append(cityName);
+                $('.showCities').append(`
+                    <div class="city mb-3">
+                        <p data-id="${response.id}" class="cityName">${response.name}</p>
+                    </div>
+                `);
             }
         });
     });

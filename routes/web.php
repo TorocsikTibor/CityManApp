@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [CityController::class, 'index'])->name('index');
-Route::get('/county/{id}', [CityController::class, 'getCities']);
-Route::post('/county/city/create', [CityController::class, 'create']);
-Route::post('/county/city/update/{id}', [CityController::class, 'update']);
-Route::delete('/county/city/delete/{id}', [CityController::class, 'delete']);
+Route::group(['prefix' => 'county'], function () {
+    Route::get('/{id}', [CityController::class, 'getCities']);
+    Route::post('/city/create', [CityController::class, 'create']);
+    Route::post('/city/update/{id}', [CityController::class, 'update']);
+    Route::delete('/city/delete/{id}', [CityController::class, 'delete']);
+});

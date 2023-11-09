@@ -22,6 +22,11 @@ $(document).ready(function () {
             success: function () {
                 button.closest('.city').children('.cityName').text(cityName).show();
                 button.closest('.cityEditor').remove();
+            },
+            error: function () {
+                $('#error_message').html("");
+                $('#error_message').addClass('alert alert-danger');
+                $('#error_message').text('Váratlan hiba történt');
             }
         });
     });

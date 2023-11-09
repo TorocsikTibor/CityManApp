@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Models\City;
-use http\Env\Response;
+
 
 class CityService
 {
-    public function create($countyId, $name): City
+    public function create(int $countyId, string $name): City
     {
         $city = new City;
         $city->county_id = $countyId;
@@ -17,17 +17,16 @@ class CityService
         return $city;
     }
 
-    public function update($id, $name): void
+    public function update(int $id, string $name): void
     {
-        $city = City::find($id);
+        $city = City::findOrFail($id);
         $city->name = $name;
         $city->save();
     }
 
-    public function delete($id): void
+    public function delete(int $id): void
     {
-        $city = City::find($id);
-        $city->delete();
+        City::destroy($id);
     }
 
 }

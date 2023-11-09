@@ -15,8 +15,13 @@ $(document).ready(function () {
             success: function () {
                 $('#success_message').html("");
                 $('#success_message').addClass('alert alert-success');
-                $('#success_message').text('City deleted');
+                $('#success_message').text('Város törölve');
                 button.closest('.cityEditor').remove();
+            },
+            error: function () {
+                $('#error_message').html("");
+                $('#error_message').addClass('alert alert-danger');
+                $('#error_message').text('Váratlan hiba történt');
             }
         });
     });

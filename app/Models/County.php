@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class County extends Model
 {
@@ -14,10 +13,4 @@ class County extends Model
     protected $fillable = ['name'];
 
     public $timestamps = false;
-
-
-    public function Cities(): HasMany
-    {
-        return $this->hasMany(City::class);
-    }
 }

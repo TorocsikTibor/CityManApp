@@ -20,7 +20,7 @@ class CityController extends Controller
         return view('home', ['counties' => $counties]);
     }
 
-    public function getCities($id): JsonResponse
+    public function getCities(int $id): JsonResponse
     {
         $cities = City::where('county_id', $id)->get();
 
@@ -38,13 +38,13 @@ class CityController extends Controller
     {
         $cityService->update($id, $request->input('name'));
 
-        return response()->json('success');
+        return response()->json();
     }
 
     public function delete(int $id, CityService $cityService): JsonResponse
     {
         $cityService->delete($id);
 
-        return response()->json('success');
+        return response()->json();
     }
 }

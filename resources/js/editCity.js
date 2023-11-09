@@ -6,12 +6,14 @@ $(document).ready(function () {
             $(cityNameEl).hide();
 
             $(this).append(
-                '<div class="cityEditor d-flex justify-content-between">' +
-                '<input type="text" name="name" class="form-control cityValue" value="' + cityName + '">' +
-                '<input type="button" class="btn btn-primary update" value="Mentés">' +
-                '<input type="button" class="btn btn-danger mx-1 delete" value="Törlés">' +
-                '<input type="button" class="btn btn-primary cancel" value="Mégse">' +
-                '</div>'
+                `
+                 <div class="cityEditor d-flex justify-content-between">
+                <input type="text" name="name" class="form-control cityValue" value="${cityName}">
+                <input type="button" class="btn btn-primary update" value="Mentés">
+                <input type="button" class="btn btn-danger mx-1 delete" value="Törlés">
+                <input type="button" class="btn btn-primary cancel" value="Mégse">
+                </div>
+                `
             );
         }
     });
